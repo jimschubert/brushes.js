@@ -2,61 +2,69 @@
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
 <script type="text/javascript" src="../../src/brushes.js"></script>
 <script type="text/javascript">
-
 var mkr;
 
 function init() {
-    
-    function findPos(obj,e) {
-		var offset = $(canvas).offset();		
-		var curLeft = offset.left;
-		var curTop = offset.top;
-	    return {x:curLeft, y:curTop};
-	}
-	
-	function getScrollXY(){
-		var scrOfX = 0, scrOfY = 0;
-		if (typeof(window.pageYOffset) == 'number') {
-			scrOfY = window.pageYOffset;
-			scrOfX = window.pageXOffset;
-		}
-		else 
-			if (document.body && (document.body.scrollLeft || document.body.scrollTop)) {
-				scrOfY = document.body.scrollTop;
-				scrOfX = document.body.scrollLeft;
-			}
-			else 
-				if (document.documentElement && (document.documentElement.scrollLeft || document.documentElement.scrollTop)) {
-					scrOfY = document.documentElement.scrollTop;
-					scrOfX = document.documentElement.scrollLeft;
-				}
-		return {
-			x: scrOfX,
-			y: scrOfY
-		};
-	}
-	
-    var points = [[50,150],[150,150],[150,50],[50,50],[50,150]];
-        
+
+    function findPos(obj, e) {
+        var offset = $(canvas).offset();
+        var curLeft = offset.left;
+        var curTop = offset.top;
+        return {
+            x: curLeft,
+            y: curTop
+        };
+    }
+
+    function getScrollXY() {
+        var scrOfX = 0,
+            scrOfY = 0,
+            d = document;
+        if (typeof (window.pageYOffset) == 'number') {
+            scrOfY = window.pageYOffset;
+            scrOfX = window.pageXOffset;
+        } else if (d.body && (d.body.scrollLeft || d.body.scrollTop)) {
+            scrOfY = d.body.scrollTop;
+            scrOfX = d.body.scrollLeft;
+        } else if (d.documentElement && (d.documentElement.scrollLeft || d.documentElement.scrollTop)) {
+            scrOfY = d.documentElement.scrollTop;
+            scrOfX = d.documentElement.scrollLeft;
+        }
+        return {
+            x: scrOfX,
+            y: scrOfY
+        };
+    }
+
+    var points = [
+        [50, 150],
+        [150, 150],
+        [150, 50],
+        [50, 50],
+        [50, 150]
+    ];
+
     var canvas = $('#canvas').get(0),
-        context =  canvas.getContext("2d"),
-		marker = new Brushes.marker({context: context }),
-		lastX = points[0][0], 
-		lastY = points[0][1],
-		canvasPos = findPos(canvas, null),
-		scrollAmount = getScrollXY();
-		
-	for (var i = 0; i < points.length; i++)
-	{
-	    var x = points[i][0], y = points[i][1];
+        context = canvas.getContext("2d"),
+        marker = new Brushes.marker({
+            context: context
+        }),
+        lastX = points[0][0],
+        lastY = points[0][1],
+        canvasPos = findPos(canvas, null),
+        scrollAmount = getScrollXY();
+
+    for (var i = 0; i < points.length; i++) {
+        var x = points[i][0],
+            y = points[i][1];
         marker.strokeStart(lastX, lastY);
-        marker.stroke(x,y);
-	    lastX = x - canvasPos.x + scrollAmount.x;
-		lastY = y - canvasPos.y + scrollAmount.y;
-	}
-	marker.strokeEnd();
-	
-	mkr = marker;
+        marker.stroke(x, y);
+        lastX = x - canvasPos.x + scrollAmount.x;
+        lastY = y - canvasPos.y + scrollAmount.y;
+    }
+    marker.strokeEnd();
+
+    mkr = marker;
 }
 
 </script>
