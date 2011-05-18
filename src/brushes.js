@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 var Brush = function(){ 
-    this.init.apply(this);
+    this.init();
 };
 Brush.prototype = {
     DEBUG: true,
@@ -113,13 +113,14 @@ Brush.prototype = {
         this.prevMouseY = a
     },
     stroke: function(newX, newY){	
-		this._debug("stroke");       
-        this.context.beginPath();
-        this.context.moveTo(this.prevMouseX, this.prevMouseY);
-        this.context.lineTo(newX, newY);
-        this.context.stroke();
-		this.context.fill();
-		this.context.closePath();        
+		this._debug("stroke");   
+		var context = this.context;    
+        context.beginPath();
+        context.moveTo(this.prevMouseX, this.prevMouseY);
+        context.lineTo(newX, newY);
+        context.stroke();
+		context.fill();
+		context.closePath();        
         this.prevMouseX = newX;
         this.prevMouseY = newY
     },
@@ -229,6 +230,7 @@ var Brushes = (function(brush){
 	    self.className = "marker";
         data = data || {};
         data.weight = 5.0;
+        self.context = data.context;
     };
     _marker.prototype = new _brush;
     _marker.prototype._init = function(data){
