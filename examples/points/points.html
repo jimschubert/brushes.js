@@ -1,66 +1,75 @@
+<!DOCTYPE html>
 <html>
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
-<script type="text/javascript" src="../../src/brushes.js"></script>
-<script type="text/javascript">
+  <head>
+    <meta name="generator"
+    content="HTML Tidy for Linux (vers 25 March 2009), see www.w3.org" />
+    <script type="text/javascript"
+    src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+    <script type="text/javascript" src="../../src/brushes.js"></script>
+    <script type="text/javascript">
 
 var mkr;
 
 function init() {
     
     function findPos(obj,e) {
-		var offset = $(canvas).offset();		
-		var curLeft = offset.left;
-		var curTop = offset.top;
-	    return {x:curLeft, y:curTop};
-	}
-	
-	function getScrollXY(){
-		var scrOfX = 0, scrOfY = 0;
-		if (typeof(window.pageYOffset) == 'number') {
-			scrOfY = window.pageYOffset;
-			scrOfX = window.pageXOffset;
-		}
-		else 
-			if (document.body && (document.body.scrollLeft || document.body.scrollTop)) {
-				scrOfY = document.body.scrollTop;
-				scrOfX = document.body.scrollLeft;
-			}
-			else 
-				if (document.documentElement && (document.documentElement.scrollLeft || document.documentElement.scrollTop)) {
-					scrOfY = document.documentElement.scrollTop;
-					scrOfX = document.documentElement.scrollLeft;
-				}
-		return {
-			x: scrOfX,
-			y: scrOfY
-		};
-	}
-	
+    var offset = $(canvas).offset();    
+    var curLeft = offset.left;
+    var curTop = offset.top;
+      return {x:curLeft, y:curTop};
+  }
+  
+  function getScrollXY(){
+    var scrOfX = 0, scrOfY = 0;
+    if (typeof(window.pageYOffset) == 'number') {
+      scrOfY = window.pageYOffset;
+      scrOfX = window.pageXOffset;
+    }
+    else 
+      if (document.body &amp;&amp; (document.body.scrollLeft ||
+document.body.scrollTop)) {
+        scrOfY = document.body.scrollTop;
+        scrOfX = document.body.scrollLeft;
+      }
+      else 
+        if (document.documentElement &amp;&amp;
+(document.documentElement.scrollLeft || document.documentElement.scrollTop)) {
+          scrOfY = document.documentElement.scrollTop;
+          scrOfX = document.documentElement.scrollLeft;
+        }
+    return {
+      x: scrOfX,
+      y: scrOfY
+    };
+  }
+  
     var points = [[50,150],[150,150],[150,50],[50,50],[50,150]];
         
     var canvas = $('#canvas').get(0),
         context =  canvas.getContext("2d"),
-		marker = new Brushes.marker({context: context }),
-		lastX = points[0][0], 
-		lastY = points[0][1],
-		canvasPos = findPos(canvas, null),
-		scrollAmount = getScrollXY();
-		
-	for (var i = 0; i < points.length; i++)
-	{
-	    var x = points[i][0], y = points[i][1];
+    marker = new Brushes.marker({context: context }),
+    lastX = points[0][0], 
+    lastY = points[0][1],
+    canvasPos = findPos(canvas, null),
+    scrollAmount = getScrollXY();
+    
+  for (var i = 0; i &lt; points.length; i++)
+  {
+      var x = points[i][0], y = points[i][1];
         marker.strokeStart(lastX, lastY);
         marker.stroke(x,y);
-	    lastX = x - canvasPos.x + scrollAmount.x;
-		lastY = y - canvasPos.y + scrollAmount.y;
-	}
-	marker.strokeEnd();
-	
-	mkr = marker;
+      lastX = x - canvasPos.x + scrollAmount.x;
+    lastY = y - canvasPos.y + scrollAmount.y;
+  }
+  marker.strokeEnd();
+  
+  mkr = marker;
 }
 
 </script>
-<body onload="init();">
-<canvas id="canvas"></canvas>
-</body>
+    <title>Points Example</title>
+  </head>
+  <body onload="init();">
+    <canvas id="canvas"></canvas>
+  </body>
 </html>
