@@ -25,7 +25,7 @@ var Brush = function () {
         this.init();
     };
 Brush.prototype = {
-    DEBUG: true,
+    DEBUG: false,
     _debug: function (msg) {
         if (this.DEBUG) {
             console.log(msg);
@@ -549,5 +549,5 @@ var Brushes = (function (brush) {
 
 if ("object" === typeof module) {
     module.exports.Brushes = Brushes;
-    module.exports.Brush = new Brush();
+    module.exports.Brush = Brush;
 }
