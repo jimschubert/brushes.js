@@ -150,7 +150,7 @@ Brush.prototype = {
             return null;
         }
         if (reverse) {
-            for (var i = this.points.length; i > 0; i--) {
+            for (var i = this.points.length; i >= 0; i--) {
                 var pt = this.points[i];
                 if (typeof (pt) !== "undefined") callback(pt);
             };
