@@ -35,6 +35,19 @@ exports.init = testCase({
         var brush = new Brush();
         test.ok(brush instanceof Brush);
         test.done();
+    }
+});
+
+/* TODO: extract this to another file */
+exports.functionality = testCase({
+    setUp: function(callback) {
+	this.brush = new Brush();
+	this.context = new Canvas(500,500).getContext('2d');
+	this.brush.context = this.context;
+	callback();
+    },
+    tearDown: function(callback) {
+	callback();
     },
     methods: function(test) {
 	var self = this;
