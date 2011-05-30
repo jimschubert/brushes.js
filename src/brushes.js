@@ -579,17 +579,16 @@ THE SOFTWARE.
         self.prevMouseY = y;
     };
 
-    var _brushes = {
-        pencil: _pencil,
-        pen: _pen,
-        marker: _marker,
-        charcoal: _charcoal,
-        stars: _stars,
-        boxes: _boxes,
-        hearts: _hearts,
-        blood: _blood,
-        Brush: _brush
-    }
+    var _brushes = { }
+    _brushes['pencil'] = _pencil;
+    _brushes['pen'] = _pen;
+    _brushes['marker'] = _marker;
+    _brushes['charcoal'] = _charcoal;
+    _brushes['stars'] = _stars;
+    _brushes['boxes'] = _boxes;
+    _brushes['hearts'] = _hearts;
+    _brushes['blood'] = _blood;
+    _brushes['Brush'] = _brush;
         
 	if ("object" === typeof module && "object" === typeof module.exports) {
 		module.exports.Brushes = _brushes;
