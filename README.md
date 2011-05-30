@@ -40,32 +40,41 @@ Now, running tests can be done by entering the following in a terminal from the 
 
 This is a snippet from `examples/points/points.html`:
 
-        var points = [
-            [50, 150],
-            [150, 150],
-            [150, 50],
-            [50, 50],
-            [50, 150]
-        ];
+		var points = [
+			[50, 150],
+			[150, 150],
+			[150, 50],
+			[50, 50],
+			[50, 150]
+		];
 
-        var canvas = $('#canvas').get(0),
-            context = canvas.getContext("2d"),
-            marker = new Brushes.marker({
-                context: context
-            }),
-            lastX = points[0][0],
-            lastY = points[0][1],
-            canvasPos = findPos(canvas, null),
-            scrollAmount = getScrollXY();
+		var examples = ['blood', 'boxes', 'charcoal', 'hearts', 'marker', 'pen', 'pencil', 'stars'];
 
-        for (var i = 0; i < points.length; i++) {
-            var x = points[i][0],
-                y = points[i][1];
-            marker.strokeStart(lastX, lastY);
-            marker.stroke(x, y);
-            lastX = x - canvasPos.x + scrollAmount.x;
-            lastY = y - canvasPos.y + scrollAmount.y;
-        }
-        marker.strokeEnd();
-        
+		for(var i = 0;i < points.length;i++){ 
+			pointsDiv.html(pointsDiv.html() + "[" + points[i][0] + "," + points[i][1] + "]</br>");
+		}
 
+		for(var example = 0;example<examples.length; example++){
+			var canvas = $('#canvas-' + examples[example]).get(0),
+				ctx = canvas.getContext("2d"),
+				brush = new Brushes[examples[example]]({
+					context: ctx,
+					size: 1,
+					color: [244,14,68],
+					randomize: true, /* color has to be set to randomize it */
+					pressure: 2
+				}),
+				lastX = points[0][0],
+				lastY = points[0][1],
+				canvasPos = findPos(canvas, null);
+
+			for (var i = 0; i < points.length; i++) {
+				var x = points[i][0],
+					y = points[i][1];
+				brush.strokeStart(lastX, lastY);
+				brush.stroke(x, y);
+				lastX = x; 
+				lastY = y;
+			}
+			brush.strokeEnd();
+		}

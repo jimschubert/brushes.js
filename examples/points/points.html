@@ -27,7 +27,7 @@ function init() {
         [50, 150]
     ];
 
-    var examples = ['pen', 'pencil', 'boxes', 'hearts'];
+    var examples = ['blood', 'boxes', 'charcoal', 'hearts', 'marker', 'pen', 'pencil', 'stars'];
     
     for(var i = 0;i < points.length;i++){ 
 		pointsDiv.html(pointsDiv.html() + "[" + points[i][0] + "," + points[i][1] + "]</br>");
@@ -62,23 +62,47 @@ function init() {
 </script>
 <body onload="init();">
 <h1>Points</h1>
-<em>Tip: hit F5 a few times</em>
+<p><em>Tip: hit F5 a few times</em></p>
 <div id="points"></div>
+
 <div class="canvas">
-<h2>boxes</h2>
-<canvas id="canvas-boxes" height="200px" width="200px"></canvas>
+	<h2>boxes</h2>
+	<canvas id="canvas-boxes" height="200px" width="200px"></canvas>
 </div>
+
 <div class="canvas">
-<h2>hearts</h2>
-<canvas id="canvas-hearts" height="200px" width="200px"></canvas>
+	<h2>hearts</h2>
+	<canvas id="canvas-hearts" height="200px" width="200px"></canvas>
 </div>
+
 <div class="canvas">
-<h2>pen</h2>
-<canvas id="canvas-pen" height="200px" width="200px"></canvas>
+	<h2>pen</h2>
+	<canvas id="canvas-pen" height="200px" width="200px"></canvas>
 </div>
+
 <div class="canvas">
-<h2>pencil</h2>
-<canvas id="canvas-pencil" height="200px" width="200px"></canvas>
+	<h2>pencil</h2>
+	<canvas id="canvas-pencil" height="200px" width="200px"></canvas>
+</div>
+
+<div class="canvas">
+	<h2>blood</h2>
+	<canvas id="canvas-blood" height="200px" width="200px"></canvas>
+</div>
+
+<div class="canvas">
+	<h2>charcoal</h2>
+	<canvas id="canvas-charcoal" height="200px" width="200px"></canvas>
+</div>
+
+<div class="canvas">
+	<h2>marker</h2>
+	<canvas id="canvas-marker" height="200px" width="200px"></canvas>
+</div>
+
+<div class="canvas">
+	<h2>stars</h2>
+	<canvas id="canvas-stars" height="200px" width="200px"></canvas>
 </div>
 </body>
 </html>

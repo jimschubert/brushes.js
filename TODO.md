@@ -1,2 +1,3 @@
 -add randomize to all brushes
 -add more tests
+-add in-code documentation

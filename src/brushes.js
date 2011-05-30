@@ -21,178 +21,169 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-var Brush = function (data) {
-        this.init(data);
-    };
-Brush.prototype = {
-    DEBUG: false,
-    _debug: function (msg) {
-        if (this.DEBUG) {
-            console.log(msg);
-        }
-    },
-/*    constructor: Brush, */
-    className: "Brush",
-    defaults: {
-		WEIGHT: 0.1,
-		BRUSH_SIZE: 1,
-		BRUSH_PRESSURE: 1,
-		COLOR: [0, 0, 0],
-		RANDOM_COLORS: false
-	},
-	options: {
-		weight: 0.1,
-		size: 1,
-		pressure: 1,
-		color: [0, 0, 0],
-		randomize: false
-	},
-    context: null,
-    prevMouseX: null,
-    prevMouseY: null,
-    points: new Array(),
-    count: 0,
-    _strokeStyle: function (data) {
-        data = data || {};
-        this._mergeOptions(data);
-        var opt = this.options;
-        
-        var r = opt.color[0];
-        var g = opt.color[1];
-        var b = opt.color[2];
-        var a = opt.weight * opt.pressure;
-        if (opt.randomize) {
-            var randomized = "".concat("rgba(", Math.floor(Math.random() * r), ",", Math.floor(Math.random() * g), ",", Math.floor(Math.random() * b), ",", a, ")");
-            this._debug("_strokeStyle: " + randomized);
-            return randomized;
-        }
-        var normal = "".concat("rgba(", r, ",", g, ",", b, ",", a, ")");
-        this._debug("_strokeStyle: " + normal);
-        return normal;
-    },
-    init: function (data) {
-        this._debug("Entering init for " + this.className);
-        if (data && data.context) {
-            this.reset(this.data);
-			this._mergeOptions(data);
-        } else {
-            var $tag = this.window && this.window.document && this.window.document.getElementsByTagName;
-            if ($tag) {
-                var canvas = $tag('canvas') ? $tag('canvas')[0] : null;
-                if (canvas) {
-                    this.context = canvas.getContext("2d");
-                }
-            }
-        }
-        if ("function" === typeof this._init) {
-            this._init(data);
-        }
-        this._debug("Leaving init.");
-    },
-    reset: function (data) {
-        this._debug("Entering reset.");
-        data = data || this.options;
-        if (data) {
-            this.context = data.context || this.context.canvas.getContext('2d');
-            this.options.size = data.size || this.defaults.BRUSH_SIZE;
-            this.options.pressure = data.pressure || this.defaults.BRUSH_PRESSURE;
-            this.options.color = data.color || this.defaults.COLOR;
-            this.options.randomize = data.randomColors || data.randomize || this.defaults.RANDOM_COLORS;
-            this.options.weight = data.weight || this.defaults.WEIGHT;
-            this.prevMouseX = null;
-            this.prevMouseY = null;
-            this.points = new Array();
-            this.count = 0;
-            
-        }
-        this._setContextDefaults();
-        this._init();
-        this._debug("Leaving reset.");
-    },
-    destroy: function () {
-        this._debug("Destroy.");
-    },
-    strokeEnd: function () {
-        this._debug("strokeEnd.");
-        this.context.closePath();
-    },
-    strokeStart: function (b, a) {
-        this._debug("strokeStart");
-        this.prevMouseX = b;
-        this.prevMouseY = a
-    },
-    stroke: function (newX, newY) {
-        this._debug("stroke");
-        var context = this.context;
-        context.beginPath();
-        context.moveTo(this.prevMouseX, this.prevMouseY);
-        context.lineTo(newX, newY);
-        context.stroke();
-        context.fill();
-        context.closePath();
-        this.prevMouseX = newX;
-        this.prevMouseY = newY
-    },
-    pointDistance: function (x, y, x0, y0) {
-        return Math.sqrt((x -= x0) * x + (y -= y0) * y);
-    },
-    _setContextDefaults: function () {
-    	var style = this._strokeStyle();
-        this._debug("_setContextDefaults");
-        this.context.fillStyle = style;
-        this.context.font = "10px sans-serif";
-        this.context.globalAlpha = 1;
-        this.context.globalCompositeOperation = "darker";
-        this.context.lineCap = "square";
-        this.context.lineJoin = "miter";
-        this.context.lineWidth = this.defaults.BRUSH_SIZE * this.defaults.BRUSH_PRESSURE;
-        this.context.miterLimit = 10;
-        this.context.shadowBlur = 0;
-        this.context.shadowColor = "rgba(0,0,0,0.0)";
-        this.context.shadowOffsetX = 0;
-        this.context.shadowOffsetY = 0;
-        this.context.strokeStyle = style;
-        this.context.textAlign = "start";
-        this.context.textBaseline = "alphabetic";
-    },
-    _eachPoint: function (reverse, callback) {
-        if (typeof (callback) !== "function") {
-            this._debug("callback was not a function, existing _eachPoint");
-            return null;
-        }
-        if (reverse) {
-            for (var i = this.points.length; i >= 0; i--) {
-                var pt = this.points[i];
-                if (typeof (pt) !== "undefined") callback(pt);
-            };
-        } else {
-            for (var j = 0; j <= this.points.length; j++) {
-                var pt = this.points[j];
-                if (typeof (pt) !== "undefined") callback(pt);
-            }
-        }
-        return this.points;
-    },
-    _mergeOptions: function(data){
-    	if("object" == typeof data)
-	    	for (p in data) { this.options[p] = data[p]; }
-    }
-};
 
-var Brushes = (function (brush) {
-
-    var brushes = this,
-        _brush = brush;
+/**  @define {boolean} */
+;DEBUG_BRUSH = false;
+(function (g) {
+	/**
+	 * @constructor
+	 * @param {Object} [data] The data object is optional.
+	 */
+	var Brush = function (data) { this.init(data); };
+	Brush.prototype = {
+		DEBUG: DEBUG_BRUSH,
+		_debug: function (msg) {
+			if (this.DEBUG) {
+			    console.log(msg);
+			}
+		},
+		className: "Brush",
+		defaults: {
+			WEIGHT: 0.1,
+			BRUSH_SIZE: 1,
+			BRUSH_PRESSURE: 1,
+			COLOR: [0, 0, 0],
+			RANDOM_COLORS: false
+		},
+		options: {
+			weight: 0.1,
+			size: 1,
+			pressure: 1,
+			color: [0, 0, 0],
+			randomize: false
+		},
+		context: null,
+		prevMouseX: null,
+		prevMouseY: null,
+		points: new Array(),
+		count: 0,
+		_strokeStyle: function (data) {
+			this._mergeOptions(data || { });
+			var opt = this.options;
+			
+			var r = opt.color[0];
+			var g = opt.color[1];
+			var b = opt.color[2];
+			var a = opt.weight * opt.pressure;
+			if (opt.randomize) {
+				var rnd = Math.random,
+					flat = Math.floor;
+			    var randomized = "".concat("rgba(", flat(rnd() * r), ",", flat(rnd() * g), ",", flat(rnd() * b), ",", a, ")");
+			    return randomized;
+			}
+			var normal = "".concat("rgba(", r, ",", g, ",", b, ",", a, ")");
+			return normal;
+		},
+		init: function (data) {
+			if (data && data.context) {
+			    this.reset(this.data);
+				this._mergeOptions(data);
+			} else {
+			    var $tag = this.window && this.window.document && this.window.document.getElementsByTagName;
+			    if ($tag) {
+			        var canvas = $tag('canvas') ? $tag('canvas')[0] : null;
+			        if (canvas) {
+			            this.context = canvas.getContext("2d");
+			        }
+			    }
+			}
+			if ("function" === typeof this._init) {
+			    this._init(data);
+			}
+		},
+		reset: function (data) {
+			if (data || this.options) {
+			    this.context = data.context || this.context.canvas.getContext('2d');
+			    this.options.size = data.size || this.defaults.BRUSH_SIZE;
+			    this.options.pressure = data.pressure || this.defaults.BRUSH_PRESSURE;
+			    this.options.color = data.color || this.defaults.COLOR;
+			    this.options.randomize = data.randomize || this.defaults.RANDOM_COLORS;
+			    this.options.weight = data.weight || this.defaults.WEIGHT;
+			    this.prevMouseX = null;
+			    this.prevMouseY = null;
+			    this.points = new Array();
+			    this.count = 0;
+			}
+			this._setContextDefaults();
+			this._init();
+		},
+		destroy: function () {	},
+		strokeEnd: function () {
+			this.context.closePath();
+		},
+		strokeStart: function (b, a) {
+			this.prevMouseX = b;
+			this.prevMouseY = a
+		},
+		stroke: function (newX, newY) {
+			var context = this.context;
+			context.beginPath();
+			context.moveTo(this.prevMouseX, this.prevMouseY);
+			context.lineTo(newX, newY);
+			context.stroke();
+			context.fill();
+			context.closePath();
+			this.prevMouseX = newX;
+			this.prevMouseY = newY
+		},
+		pointDistance: function (x, y, x0, y0) {
+			return Math.sqrt((x -= x0) * x + (y -= y0) * y);
+		},
+		_setContextDefaults: function () {
+			var style = this._strokeStyle();
+			this.context.fillStyle = style;
+			this.context.font = "10px sans-serif";
+			this.context.globalAlpha = 1;
+			this.context.globalCompositeOperation = "darker";
+			this.context.lineCap = "square";
+			this.context.lineJoin = "miter";
+			this.context.lineWidth = this.defaults.BRUSH_SIZE * this.defaults.BRUSH_PRESSURE;
+			this.context.miterLimit = 10;
+			this.context.shadowBlur = 0;
+			this.context.shadowColor = "rgba(0,0,0,0.0)";
+			this.context.shadowOffsetX = 0;
+			this.context.shadowOffsetY = 0;
+			this.context.strokeStyle = style;
+			this.context.textAlign = "start";
+			this.context.textBaseline = "alphabetic";
+		},
+		_eachPoint: function (reverse, callback) {
+			if (typeof (callback) !== "function") {
+			    return null;
+			}
+			if (reverse) {
+			    for (var i = this.points.length; i >= 0; i--) {
+			        var pt = this.points[i];
+			        if (typeof (pt) !== "undefined") callback(pt);
+			    };
+			} else {
+			    for (var j = 0; j <= this.points.length; j++) {
+			        var pt = this.points[j];
+			        if (typeof (pt) !== "undefined") callback(pt);
+			    }
+			}
+			return this.points;
+		},
+		_mergeOptions: function(data){
+			if("object" == typeof data)
+				for (p in data) { this.options[p] = data[p]; }
+		}
+	};
+	
+    var _brush = Brush;
 
     /***************************************************************
      * Brushes.pencil
-     * @param {Object} data
+	 * @param {Object} [data] The data object is optional.
      * @author Jim Schubert
-     * @classDescription Returns a usable brush object for writing
+     * @description Returns a usable brush object for writing
      * to HTML canvas element's context
      ***************************************************************/
     var _pencil = function (data) {
             var self = this;
+			 /* @const
+			 * @type {string}
+			 */
             self.className = "pencil";
             data = data || {};
             data.weight = 0.5;
@@ -201,22 +192,25 @@ var Brushes = (function (brush) {
         };
     _pencil.prototype = new _brush;
     _pencil.prototype._init = function (data) {
+    	var self = this;
         if (self.context) {
             self.context.lineCap = "square";
             self.context.lineJoin = "miter";
         }
-        self._debug("_init");
     };
 
     /***************************************************************
      * Brushes.pen
-     * @param {Object} data
+	 * @param {Object} [data] The data object is optional.
      * @author Jim Schubert
-     * @classDescription Returns a usable brush object for writing
+     * @description Returns a usable brush object for writing
      * to HTML canvas element's context
      ***************************************************************/
     var _pen = function (data) {
 			var self = this;
+			/* @const
+			 * @type {string}
+			 */
             self.className = "pen";
             self.data = data || {};
             self.data.weight = 3.0;
@@ -231,18 +225,20 @@ var Brushes = (function (brush) {
             self.context.lineCap = "block";
             self.context.lineJoin = "round";
         }
-        self._debug("_init");
     };
 
     /***************************************************************
      * Brushes.marker
-     * @param {Object} data
+	 * @param {Object} [data] The data object is optional.
      * @author Jim Schubert
-     * @classDescription Returns a usable brush object for writing
+     * @description Returns a usable brush object for writing
      * to HTML canvas element's context
      ***************************************************************/
     var _marker = function (data) {
             var self = this;
+            /* @const
+			 * @type {string}
+			 */
             self.className = "marker";
             self.data = data || {};
             self.data.weight = 5.0;
@@ -256,18 +252,20 @@ var Brushes = (function (brush) {
             self.context.lineCap = "round";
             self.context.lineJoin = "bevel";
         }
-        self._debug("_init");
     };
 
     /***************************************************************
      * Brushes.charcoal
-     * @param {Object} data
+	 * @param {Object} [data] The data object is optional.
      * @author Jim Schubert
-     * @classDescription Returns a usable brush object for writing
+     * @description Returns a usable brush object for writing
      * to HTML canvas element's context
      ***************************************************************/
     _charcoal = function (data) {
         var self = this;
+        /* @const
+		 * @type {string}
+		 */
         self.className = "charcoal";
         self.data = data || {};
         self.data.weight = 5.0;
@@ -305,13 +303,16 @@ var Brushes = (function (brush) {
 
     /***************************************************************
      * Brushes.stars
-     * @param {Object} data
+	 * @param {Object} [data] The data object is optional.
      * @author Jim Schubert
-     * @classDescription Returns a usable brush object for writing
+     * @description Returns a usable brush object for writing
      * to HTML canvas element's context
      ***************************************************************/
     var _stars = function (data) {
             var self = this;
+            /* @const
+			 * @type {string}
+			 */
             self.className = "stars";
             data = data || {};
             data.weight = 5.0;
@@ -378,13 +379,16 @@ var Brushes = (function (brush) {
 
     /***************************************************************
      * Brushes.boxes
-     * @param {Object} data
+	 * @param {Object} [data] The data object is optional.
      * @author Jim Schubert
-     * @classDescription Returns a usable brush object for writing
+     * @description Returns a usable brush object for writing
      * to HTML canvas element's context
      ***************************************************************/
     var _boxes = function (data) {
             var self = this;
+            /* @const
+			 * @type {string}
+			 */
             self.className = "boxes";
             data = data || {};
             data.weight = 0.5;
@@ -445,13 +449,16 @@ var Brushes = (function (brush) {
 
     /***************************************************************
      * Brushes.hearts
-     * @param {Object} data
+	 * @param {Object} [data] The data object is optional.
      * @author Jim Schubert
-     * @classDescription Returns a usable brush object for writing
+     * @description Returns a usable brush object for writing
      * to HTML canvas element's context
      ***************************************************************/
     var _hearts = function (data) {
             var self = this;
+            /* @const
+			 * @type {string}
+			 */
             self.className = "hearts";
             data = data || {};
             data.weight = 0.5;
@@ -506,14 +513,16 @@ var Brushes = (function (brush) {
 
     /***************************************************************
      * Brushes.blood
-     * @param {Object} data
+	 * @param {Object} [data] The data object is optional.
      * @author Jim Schubert
-     * @classDescription Returns a usable brush object for writing
+     * @description Returns a usable brush object for writing
      * to HTML canvas element's context
      ***************************************************************/
     var _blood = function (data) {
             var self = this;
-            self._debug("blood constructor");
+            /* @const
+			 * @type {string}
+			 */
             self.className = "blood";
             data = data || {};
             data.weight = 1.5;
@@ -523,7 +532,6 @@ var Brushes = (function (brush) {
     _blood.prototype = new Brush;
     _blood.prototype._init = function (data) {
     	var self = this;
-        self._debug("blood._init");
         if (self.context && self.context.globalCompositeOperation) {
             self.context.globalCompositeOperation = "darker";
         }
@@ -532,7 +540,6 @@ var Brushes = (function (brush) {
     };
     _blood.prototype.stroke = function (x, y) {
     	var self = this;
-        self._debug("blood.stroke");
         self.context.fillStyle = self._strokeStyle({
             randomize: self.options.randomize
         });
@@ -572,7 +579,7 @@ var Brushes = (function (brush) {
         self.prevMouseY = y;
     };
 
-    return {
+    var _brushes = {
         pencil: _pencil,
         pen: _pen,
         marker: _marker,
@@ -580,12 +587,14 @@ var Brushes = (function (brush) {
         stars: _stars,
         boxes: _boxes,
         hearts: _hearts,
-        blood: _blood
+        blood: _blood,
+        Brush: _brush
     }
-
-}(Brush));
-
-if ("object" === typeof module) {
-    module.exports.Brushes = Brushes;
-    module.exports.Brush = Brush;
-}
+        
+	if ("object" === typeof module && "object" === typeof module.exports) {
+		module.exports.Brushes = _brushes;
+		module.exports.Brush = _brush;
+	}
+	
+	Brushes = _brushes;
+}(this));
