@@ -14,20 +14,21 @@ exports.init = testCase({
     },
     statics: function (test) {
         test.expect(5);
-        test.ok(this.brush.__proto__.hasOwnProperty("WEIGHT"), "WEIGHT has moved from Brush.prototype");
-        test.ok(this.brush.__proto__.hasOwnProperty("BRUSH_SIZE"), "BRUSH_SIZE has moved from Brush.prototype");
-        test.ok(this.brush.__proto__.hasOwnProperty("BRUSH_PRESSURE"), "BRUSH_PRESSURE has moved from Brush.prototype");
-        test.ok(this.brush.__proto__.hasOwnProperty("COLOR"), "COLOR has moved from Brush.prototype");
-        test.ok(this.brush.__proto__.hasOwnProperty("RANDOM_COLORS"), "RANDOM_COLORS has moved from Brush.prototype");
+		var defaults = this.brush.defaults;
+        test.ok(defaults.hasOwnProperty("WEIGHT"), "WEIGHT has moved from Brush.prototype.defaults");
+        test.ok(defaults.hasOwnProperty("BRUSH_SIZE"), "BRUSH_SIZE has moved from Brush.prototype.defaults");
+        test.ok(defaults.hasOwnProperty("BRUSH_PRESSURE"), "BRUSH_PRESSURE has moved from Brush.prototype.defaults");
+        test.ok(defaults.hasOwnProperty("COLOR"), "COLOR has moved from Brush.prototype.defaults");
+        test.ok(defaults.hasOwnProperty("RANDOM_COLORS"), "RANDOM_COLORS has moved from Brush.prototype.defaults");
         test.done();
     },
     defaults: function (test) {
 	/* only put defaults here if it is important that they are base values */
         test.expect(4);
-	test.equal(0.1, this.brush.WEIGHT);
-	test.equal(1, this.brush.BRUSH_SIZE);
-	test.equal(1, this.brush.BRUSH_PRESSURE);
-	test.same([0,0,0], this.brush.COLOR);
+	test.equal(0.1, this.brush.defaults.WEIGHT);
+	test.equal(1, this.brush.defaults.BRUSH_SIZE);
+	test.equal(1, this.brush.defaults.BRUSH_PRESSURE);
+	test.same([0,0,0], this.brush.defaults.COLOR);
         test.done();
     },
     type: function (test) {

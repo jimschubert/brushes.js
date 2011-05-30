@@ -1,9 +1,11 @@
 <html>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
 <script type="text/javascript" src="../../src/brushes.js"></script>
+<style type="text/css">
+h2 { text-align: center; }
+.canvas { float: left; }
+</style>
 <script type="text/javascript">
-var mkr;
-
 function init() {
 
     function findPos(obj, e) {
@@ -16,26 +18,7 @@ function init() {
         };
     }
 
-    function getScrollXY() {
-        var scrOfX = 0,
-            scrOfY = 0,
-            d = document;
-        if (typeof (window.pageYOffset) == 'number') {
-            scrOfY = window.pageYOffset;
-            scrOfX = window.pageXOffset;
-        } else if (d.body && (d.body.scrollLeft || d.body.scrollTop)) {
-            scrOfY = d.body.scrollTop;
-            scrOfX = d.body.scrollLeft;
-        } else if (d.documentElement && (d.documentElement.scrollLeft || d.documentElement.scrollTop)) {
-            scrOfY = d.documentElement.scrollTop;
-            scrOfX = d.documentElement.scrollLeft;
-        }
-        return {
-            x: scrOfX,
-            y: scrOfY
-        };
-    }
-
+    var pointsDiv = $("#points");
     var points = [
         [50, 150],
         [150, 150],
@@ -44,31 +27,58 @@ function init() {
         [50, 150]
     ];
 
-    var canvas = $('#canvas').get(0),
-        context = canvas.getContext("2d"),
-        marker = new Brushes.marker({
-            context: context
-        }),
-        lastX = points[0][0],
-        lastY = points[0][1],
-        canvasPos = findPos(canvas, null),
-        scrollAmount = getScrollXY();
-
-    for (var i = 0; i < points.length; i++) {
-        var x = points[i][0],
-            y = points[i][1];
-        marker.strokeStart(lastX, lastY);
-        marker.stroke(x, y);
-        lastX = x - canvasPos.x + scrollAmount.x;
-        lastY = y - canvasPos.y + scrollAmount.y;
+    var examples = ['pen', 'pencil', 'boxes', 'hearts'];
+    
+    for(var i = 0;i < points.length;i++){ 
+		pointsDiv.html(pointsDiv.html() + "[" + points[i][0] + "," + points[i][1] + "]</br>");
     }
-    marker.strokeEnd();
 
-    mkr = marker;
+	for(var example = 0;example<examples.length; example++){
+		var canvas = $('#canvas-' + examples[example]).get(0),
+			ctx = canvas.getContext("2d"),
+			brush = new Brushes[examples[example]]({
+			    context: ctx,
+				size: 1,
+				color: [244,14,68],
+				randomize: true, /* color has to be set to randomize it */
+				pressure: 2
+			}),
+			lastX = points[0][0],
+			lastY = points[0][1],
+			canvasPos = findPos(canvas, null);
+
+		for (var i = 0; i < points.length; i++) {
+			var x = points[i][0],
+			    y = points[i][1];
+			brush.strokeStart(lastX, lastY);
+			brush.stroke(x, y);
+			lastX = x; 
+			lastY = y;
+		}
+		brush.strokeEnd();
+	}
 }
 
 </script>
 <body onload="init();">
-<canvas id="canvas"></canvas>
+<h1>Points</h1>
+<em>Tip: hit F5 a few times</em>
+<div id="points"></div>
+<div class="canvas">
+<h2>boxes</h2>
+<canvas id="canvas-boxes" height="200px" width="200px"></canvas>
+</div>
+<div class="canvas">
+<h2>hearts</h2>
+<canvas id="canvas-hearts" height="200px" width="200px"></canvas>
+</div>
+<div class="canvas">
+<h2>pen</h2>
+<canvas id="canvas-pen" height="200px" width="200px"></canvas>
+</div>
+<div class="canvas">
+<h2>pencil</h2>
+<canvas id="canvas-pencil" height="200px" width="200px"></canvas>
+</div>
 </body>
 </html>
