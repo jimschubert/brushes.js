@@ -1,0 +1,23 @@
+{
+  "author": "Jim Schubert <james.schubert@gmail.com> (http://github.com/jimschubert)",
+  "name": "brushes.js",
+  "description": "HTML5 canvas brushes",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jimschubert/brushes.js.git"
+  },
+  "engines": {
+    "node": ">= 0.4.4"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "canvas": "*",
+    "nodeunit": "*",
+    "uglify-js": "*"
+  },
+  "scripts": {
+    "test": "node test/run.js",
+    "minify": "node_modules/uglify-js/bin/uglifyjs -o src/brushes.min.js src/brushes.js"
+  }
+}

@@ -36,6 +36,22 @@ Now, running tests can be done by entering the following in a terminal from the 
 
 	node ./test/run.js
 
+Note: `rqeuire.paths` is removed in later versions of node.  You'll have to either install modules locally or globally.  You can now install using:
+
+    npm install -d
+
+# Testing
+You can easily start the tests by running
+
+    $ npm test
+
+# Minify
+You can minify the script by running
+
+    $ npm run-script minify
+
+This will output to `src/brushes.min.js`
+
 # brushes.js Usage
 
 This is a snippet from `examples/points/points.html`:

@@ -1,6 +1,0 @@
-[submodule "deps/nodeunit"]
-	path = deps/nodeunit
-	url = git://github.com/caolan/nodeunit.git
-[submodule "deps/canvas"]
-	path = deps/canvas
-	url = git://github.com/LearnBoost/node-canvas.git
