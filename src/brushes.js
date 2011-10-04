@@ -62,7 +62,6 @@ THE SOFTWARE.
 		points: new Array(),
 		count: 0,
 		_strokeStyle: function (data) {
-			this._mergeOptions(data || { });
 			var opt = this.options;
 			
 			var r = opt.color[0];
@@ -90,8 +89,8 @@ THE SOFTWARE.
 			    }
             }
 
-            this.reset(data);
             this._mergeOptions(data);
+            this.reset(data);
            
             if(typeof this._init === "function")
                 this._init(data);
