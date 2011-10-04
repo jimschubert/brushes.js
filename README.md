@@ -27,28 +27,27 @@ Now that we have the source on our machine, we can run `./configure` which disco
     $ ./configure && make && sudo make install
 
 ## Getting nodeunit
-For those who don't want to install nodeunit, it's linked as a submodule under `./deps/nodeunit`  After cloning this repository, do the following:
 
-	git submodule init
-	git submodule update
-
-Now, running tests can be done by entering the following in a terminal from the project root:
-
-	node ./test/run.js
-
-Note: `rqeuire.paths` is removed in later versions of node.  You'll have to either install modules locally or globally.  You can now install using:
+Note: This has changed a bit. 
+`require.paths` is removed in later versions of node.  You'll have to either install modules locally or globally.  You can now install using:
 
     npm install -d
 
-# Testing
-You can easily start the tests by running
+This installs all of the dependencies specified in `package.json` into the *node_modules* directory. When you run node, it traverses up the directory tree looking at all *node_modules* directories for the dependency.
 
-    $ npm test
+# Testing
+After installing the dependencies, you can easily start the tests by running
+
+    $ make test
+
+If you hate make, you can also run the test runner directly
+
+    $ node test/run.js
 
 # Minify
 You can minify the script by running
 
-    $ npm run-script minify
+    $ make clean minify
 
 This will output to `src/brushes.min.js`
 

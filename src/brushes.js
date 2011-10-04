@@ -169,8 +169,9 @@ THE SOFTWARE.
 			return this.points;
 		},
 		_mergeOptions: function(data){
+            var self = this;
 			if("object" == typeof data)
-				for (p in data) { this.options[p] = data[p]; }
+				for (p in data) { self.options[p] = data[p]; }
 		}
 	};
 	

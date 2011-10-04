@@ -16,8 +16,5 @@
     "nodeunit": "*",
     "uglify-js": "*"
   },
-  "scripts": {
-    "test": "node test/run.js",
-    "minify": "node_modules/uglify-js/bin/uglifyjs -o src/brushes.min.js src/brushes.js"
-  }
+  "scripts": {  }
 }
