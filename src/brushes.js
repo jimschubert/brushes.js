@@ -1,4 +1,8 @@
 /*
+project: brushes.js
+author: Jim Schubert
+url: https://github.com/jimschubert/brushes.js
+
 The MIT License
 
 Copyright (c) 2011 Jim Schubert
