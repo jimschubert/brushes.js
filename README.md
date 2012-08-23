@@ -1,3 +1,4 @@
+[![build status](https://secure.travis-ci.org/jimschubert/brushes.js.png)](http://travis-ci.org/jimschubert/brushes.js)
 # brushes.js
 
 This is a simple Brush object framework that I wrote after seeing Mr. Doob's [Harmony project](http://mrdoob.com/projects/harmony/).
